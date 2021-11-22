@@ -25,9 +25,26 @@ body {
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  display: none;
+  opacity: 1;
+  transition: opacity 800ms;
+
+  &.hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+
   h1 {
     font-size: 3rem;
+    text-align: center;
+    // .blue {
+    //   color: #04879c;
+    // }
+    // .red {
+    //   color: #f30a49;
+    // }
+  }
+  h2 {
+    font-size: 2.5rem;
   }
   .btn {
     display: inline-block;
