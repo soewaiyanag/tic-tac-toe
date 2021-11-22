@@ -24,6 +24,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   gap: 2rem;
   opacity: 1;
   transition: opacity 800ms;
@@ -36,12 +37,17 @@ body {
   h1 {
     font-size: 3rem;
     text-align: center;
-    // .blue {
-    //   color: #04879c;
-    // }
-    // .red {
-    //   color: #f30a49;
-    // }
+    &.PlayerX {
+      color: #04879c;
+    }
+    &.PlayerO {
+      color: #f30a49;
+    }
+    &.draw {
+      background: linear-gradient(to right, #04879c, #f30a49);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
   }
   h2 {
     font-size: 2.5rem;
@@ -74,6 +80,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   h1 {
     color: white;
     font-size: 2.4rem;

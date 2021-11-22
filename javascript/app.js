@@ -32,13 +32,18 @@ function isDraw() {
     model.classList.contains("hide")
   ) {
     modelMessage("DRAW");
+    modelMessageColor("draw");
   }
+}
+
+function modelMessageColor(playerName) {
+  model.querySelector("h1").className = playerName;
 }
 
 function modelMessage(message) {
   model.classList.remove("hide");
   model.querySelector("h1").textContent = message;
-  model.querySelector("h2").textContent = "Want to play again?";
+  startBtn.textContent = "RESTART";
 }
 
 const check_winner_proto = {
@@ -46,6 +51,7 @@ const check_winner_proto = {
     const pc = this.pickedCells;
     if (pc.length >= 3 && hasWon()) {
       modelMessage(`${this.name} WON`);
+      modelMessageColor(this.name);
     }
 
     function hasWon() {
