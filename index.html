@@ -10,12 +10,23 @@
   </head>
   <body>
     <header>
-      <h1>TIC - TAC - T<span>O</span>E</h1>
+      <div class="score-container container">
+        <div>
+          <h2 class="PlayerX">Player X</h2>
+          <span class="score X-score">0</span>
+        </div>
+        <div>
+          <h2 class="PlayerO">Player X</h2>
+          <span class="score O-score">0</span>
+        </div>
+      </div>
     </header>
     <main></main>
     <aside id="model">
-      <h1>READY?</h1>
-      <button class="btn" id="start">START</button>
+      <div class="message-container container">
+        <h1 class="message">READY?</h1>
+        <button class="btn" id="start">START</button>
+      </div>
     </aside>
     <script src="./javascript/app.js"></script>
   </body>

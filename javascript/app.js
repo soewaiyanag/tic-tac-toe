@@ -31,18 +31,21 @@ function isDraw() {
     playerX.pickedCells.length + playerO.pickedCells.length === 9 &&
     model.classList.contains("hide")
   ) {
-    modelMessage("DRAW");
+    setTimeout(() => {
+      modelMessage("DRAW");
+    }, 1000);
     modelMessageColor("draw");
   }
 }
 
 function modelMessageColor(playerName) {
-  model.querySelector("h1").className = playerName;
+  model.querySelector(".message").className = "message";
+  model.querySelector(".message").classList.add(playerName);
 }
 
 function modelMessage(message) {
   model.classList.remove("hide");
-  model.querySelector("h1").textContent = message;
+  model.querySelector(".message").textContent = message;
   startBtn.textContent = "RESTART";
 }
 
@@ -50,10 +53,25 @@ const check_winner_proto = {
   check_winner() {
     const pc = this.pickedCells;
     if (pc.length >= 3 && hasWon()) {
-      modelMessage(`${this.name} WON`);
+      // update the score on UI
+      this.score++;
+      const score = document.querySelector(`.${this.symbol}-score`);
+      score.textContent = this.score;
+
+      // prevent user from selecting while animating
+      main.style.pointerEvents = "none";
+
+      // Model pop-up and show message
+      setTimeout(() => {
+        modelMessage(`${this.name} WON`);
+      }, 1500);
       modelMessageColor(this.name);
     }
 
+    // TRIPLET SUM ALGORITHM TO FIND IF PLAYER IS WIN
+    /* I'M USING MAGIC SQUARE BOX WHICH MEAN
+      IF TRIPLET SUM OF PICKED CELL IS EQUAL TO 15,
+      THEY WIN */
     function hasWon() {
       pc.sort((a, b) => a - b);
       for (let i = 0; i < pc.length; i++) {
@@ -81,14 +99,19 @@ const playerO = createPlayer("O");
 
 function createPlayer(symbol) {
   let player = Object.create(check_winner_proto);
+
   player.name = "Player" + symbol;
+  player.score = 0;
   player.pickedCells = [];
-  player.symbol = `<img src="./images/${symbol}.png" class="${symbol}"" />`;
+  player.symbol = symbol;
+  player.symbol_el = `<img src="./images/${symbol}.png" class="${symbol}" />`;
 
   return player;
 }
 
 function startGame() {
+  main.style.pointerEvents = "all";
+  // restart the player's pickedCells in case they were already picked
   playerX.pickedCells = [];
   playerO.pickedCells = [];
   removeCells();
@@ -104,12 +127,12 @@ function gameBoard() {
       "click",
       () => {
         if (your_turn) {
-          cell.innerHTML = playerX.symbol;
+          cell.innerHTML = playerX.symbol_el;
           playerX.pickedCells.push(Number(cell.id));
           playerX.check_winner();
           your_turn = !your_turn;
         } else {
-          cell.innerHTML = playerO.symbol;
+          cell.innerHTML = playerO.symbol_el;
           playerO.pickedCells.push(Number(cell.id));
           playerO.check_winner();
 

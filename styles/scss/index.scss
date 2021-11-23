@@ -8,6 +8,22 @@ $header-height: 5.5rem;
   box-sizing: border-box;
 }
 
+@keyframes fadein-fadeout {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate {
+  animation: fadein-fadeout 500ms infinite;
+}
+
 body {
   background-color: #090030;
   font-family: "Poppins", sans-serif;
@@ -15,16 +31,52 @@ body {
   color: #fff;
 }
 
+.PlayerX {
+  color: #04879c;
+}
+
+.PlayerO {
+  color: #f30a49;
+}
+
+.draw {
+  background: linear-gradient(to right, #04879c, #f30a49);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.container {
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.score-container {
+  padding: 2rem 2rem 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  .score {
+    font-size: 1.5rem;
+  }
+}
+
+.message-container {
+  margin-top: 8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
 #model {
   position: absolute;
   background-color: inherit;
   inset: 0;
   top: $header-height;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+
   gap: 2rem;
   opacity: 1;
   transition: opacity 800ms;
@@ -34,23 +86,21 @@ body {
     pointer-events: none;
   }
 
-  h1 {
-    font-size: 3rem;
-    text-align: center;
-    &.PlayerX {
-      color: #04879c;
-    }
-    &.PlayerO {
+  .title {
+    color: white;
+    font-size: 2.4rem;
+    justify-self: flex-start;
+    position: absolute;
+    top: 0;
+
+    span {
       color: #f30a49;
     }
-    &.draw {
-      background: linear-gradient(to right, #04879c, #f30a49);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
   }
-  h2 {
-    font-size: 2.5rem;
+
+  .message {
+    font-size: 3rem;
+    text-align: center;
   }
   .btn {
     display: inline-block;
@@ -66,6 +116,8 @@ body {
     white-space: nowrap;
     outline: 0px solid #fff;
     transition: outline 100ms;
+    max-width: 128px;
+    max-height: 54px;
     &:hover {
       outline: 3px solid #fff;
     }
@@ -81,17 +133,10 @@ header {
   align-items: center;
   justify-content: center;
   text-align: center;
-  h1 {
-    color: white;
-    font-size: 2.4rem;
-
-    span {
-      color: #f30a49;
-    }
-  }
 }
 
 main {
+  user-select: none;
   position: relative;
   margin-top: 4rem;
   color: white;
