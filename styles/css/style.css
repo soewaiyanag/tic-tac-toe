@@ -108,8 +108,6 @@ body {
   white-space: nowrap;
   outline: 0px solid #fff;
   transition: outline 100ms;
-  max-width: 128px;
-  max-height: 54px;
 }
 #model .btn:hover {
   outline: 3px solid #fff;

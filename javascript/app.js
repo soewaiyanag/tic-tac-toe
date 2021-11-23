@@ -2,6 +2,7 @@ const main = document.querySelector("main");
 const model = document.getElementById("model");
 const startBtn = model.querySelector(".btn");
 const MAGIC_SQUARE_NUMBERS = [2, 7, 6, 9, 5, 1, 4, 3, 8];
+let someone_has_won = false;
 
 function createCells() {
   MAGIC_SQUARE_NUMBERS.forEach((num) => {
@@ -19,8 +20,6 @@ function removeCells() {
   });
 }
 
-const cells = document.querySelectorAll(".cell");
-
 startBtn.addEventListener("click", () => {
   model.classList.add("hide");
   startGame();
@@ -29,11 +28,11 @@ startBtn.addEventListener("click", () => {
 function isDraw() {
   if (
     playerX.pickedCells.length + playerO.pickedCells.length === 9 &&
-    model.classList.contains("hide")
+    !someone_has_won
   ) {
     setTimeout(() => {
       modelMessage("DRAW");
-    }, 1000);
+    }, 800);
     modelMessageColor("draw");
   }
 }
@@ -52,7 +51,11 @@ function modelMessage(message) {
 const check_winner_proto = {
   check_winner() {
     const pc = this.pickedCells;
+    const that = this;
+
+    // RUN THIS BLOCK IF THE GAME HAS WON
     if (pc.length >= 3 && hasWon()) {
+      someone_has_won = true;
       // update the score on UI
       this.score++;
       const score = document.querySelector(`.${this.symbol}-score`);
@@ -64,8 +67,21 @@ const check_winner_proto = {
       // Model pop-up and show message
       setTimeout(() => {
         modelMessage(`${this.name} WON`);
-      }, 1500);
+      }, 1200);
       modelMessageColor(this.name);
+    }
+
+    function animate(num1, num2, num3) {
+      const symbolElements = document.querySelectorAll(`.${that.symbol}`);
+      symbolElements.forEach((el) => {
+        if (
+          el.parentElement.id == num1 ||
+          el.parentElement.id == num2 ||
+          el.parentElement.id == num3
+        ) {
+          el.classList.add("animate");
+        }
+      });
     }
 
     // TRIPLET SUM ALGORITHM TO FIND IF PLAYER IS WIN
@@ -80,6 +96,7 @@ const check_winner_proto = {
 
         while (left < right) {
           if (pc[i] + pc[left] + pc[right] === 15) {
+            animate(pc[i], pc[left], pc[right]);
             return true;
           }
           if (pc[i] + pc[left] + pc[right] < 15) {
@@ -110,6 +127,7 @@ function createPlayer(symbol) {
 }
 
 function startGame() {
+  someone_has_won = false;
   main.style.pointerEvents = "all";
   // restart the player's pickedCells in case they were already picked
   playerX.pickedCells = [];
