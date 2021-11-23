@@ -21,7 +21,7 @@ $header-height: 5.5rem;
 }
 
 .animate {
-  animation: fadein-fadeout 500ms infinite;
+  animation: fadein-fadeout 500ms 3;
 }
 
 body {
@@ -31,15 +31,15 @@ body {
   color: #fff;
 }
 
-.PlayerX {
+.X-color {
   color: #04879c;
 }
 
-.PlayerO {
+.O-color {
   color: #f30a49;
 }
 
-.draw {
+.draw-color {
   background: linear-gradient(to right, #04879c, #f30a49);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

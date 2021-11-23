@@ -1,8 +1,30 @@
 const main = document.querySelector("main");
-const model = document.getElementById("model");
-const startBtn = model.querySelector(".btn");
+const startBtn = document.querySelector("#model .btn");
 const MAGIC_SQUARE_NUMBERS = [2, 7, 6, 9, 5, 1, 4, 3, 8];
 let someone_has_won = false;
+
+const model = {
+  element: document.querySelector("#model"),
+  message: function (symbol) {
+    const message = model.element.querySelector(".message");
+
+    message.className = "message";
+    message.classList.add(symbol + "-color");
+
+    this.element.classList.remove("hide");
+
+    symbol === "draw"
+      ? (message.textContent = "DRAW")
+      : (message.textContent = symbol + " WON");
+
+    startBtn.textContent = "RESTART";
+  },
+};
+
+startBtn.addEventListener("click", () => {
+  model.element.classList.add("hide");
+  startGame();
+});
 
 function createCells() {
   MAGIC_SQUARE_NUMBERS.forEach((num) => {
@@ -14,16 +36,8 @@ function createCells() {
 }
 
 function removeCells() {
-  const cells = document.querySelectorAll(".cell");
-  cells.forEach((cell) => {
-    cell.remove();
-  });
+  main.innerHTML = "";
 }
-
-startBtn.addEventListener("click", () => {
-  model.classList.add("hide");
-  startGame();
-});
 
 function isDraw() {
   if (
@@ -31,21 +45,9 @@ function isDraw() {
     !someone_has_won
   ) {
     setTimeout(() => {
-      modelMessage("DRAW");
+      model.message("draw");
     }, 800);
-    modelMessageColor("draw");
   }
-}
-
-function modelMessageColor(playerName) {
-  model.querySelector(".message").className = "message";
-  model.querySelector(".message").classList.add(playerName);
-}
-
-function modelMessage(message) {
-  model.classList.remove("hide");
-  model.querySelector(".message").textContent = message;
-  startBtn.textContent = "RESTART";
 }
 
 const check_winner_proto = {
@@ -66,9 +68,8 @@ const check_winner_proto = {
 
       // Model pop-up and show message
       setTimeout(() => {
-        modelMessage(`${this.name} WON`);
+        model.message(this.symbol);
       }, 1200);
-      modelMessageColor(this.name);
     }
 
     function animate(num1, num2, num3) {
@@ -117,7 +118,6 @@ const playerO = createPlayer("O");
 function createPlayer(symbol) {
   let player = Object.create(check_winner_proto);
 
-  player.name = "Player" + symbol;
   player.score = 0;
   player.pickedCells = [];
   player.symbol = symbol;
