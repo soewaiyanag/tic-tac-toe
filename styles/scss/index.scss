@@ -20,7 +20,16 @@ $header-height: 5.5rem;
   }
 }
 
-.animate {
+@keyframes popup {
+  0% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animation-fade-in-out {
   animation: fadein-fadeout 500ms 3;
 }
 
@@ -157,6 +166,10 @@ main {
     align-items: center;
     cursor: pointer;
     user-select: none;
+
+    .animation-popup {
+      animation: popup 200ms 1;
+    }
 
     .O {
       width: 65%;

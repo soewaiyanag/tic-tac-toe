@@ -1,11 +1,11 @@
 const main = document.querySelector("main");
-const startBtn = document.querySelector("#model .btn");
+const start_btn = document.querySelector("#model .btn");
 const MAGIC_SQUARE_NUMBERS = [2, 7, 6, 9, 5, 1, 4, 3, 8];
 let someone_has_won = false;
 
 const model = {
   element: document.querySelector("#model"),
-  message: function (symbol) {
+  message(symbol) {
     const message = model.element.querySelector(".message");
 
     message.className = "message";
@@ -17,22 +17,22 @@ const model = {
       ? (message.textContent = "DRAW")
       : (message.textContent = symbol + " WON");
 
-    startBtn.textContent = "RESTART";
+    start_btn.textContent = "RESTART";
   },
 };
 
-startBtn.addEventListener("click", () => {
+start_btn.addEventListener("click", () => {
   model.element.classList.add("hide");
   startGame();
 });
 
 function createCells() {
-  MAGIC_SQUARE_NUMBERS.forEach((num) => {
+  for (let i = 0; i < 9; i++) {
     const cell = document.createElement("div");
     cell.className = "cell";
-    cell.id = num;
+    cell.id = MAGIC_SQUARE_NUMBERS[i];
     main.appendChild(cell);
-  });
+  }
 }
 
 function removeCells() {
@@ -41,22 +41,22 @@ function removeCells() {
 
 function isDraw() {
   if (
-    playerX.pickedCells.length + playerO.pickedCells.length === 9 &&
+    playerX.picked_cells.length + playerO.picked_cells.length === 9 &&
     !someone_has_won
   ) {
     setTimeout(() => {
       model.message("draw");
-    }, 800);
+    }, 500);
   }
 }
 
 const check_winner_proto = {
   check_winner() {
-    const pc = this.pickedCells;
+    const picked_cell = this.picked_cells;
     const that = this;
 
     // RUN THIS BLOCK IF THE GAME HAS WON
-    if (pc.length >= 3 && hasWon()) {
+    if (picked_cell.length >= 3 && hasWon()) {
       someone_has_won = true;
       // update the score on UI
       this.score++;
@@ -72,35 +72,22 @@ const check_winner_proto = {
       }, 1200);
     }
 
-    function animate(num1, num2, num3) {
-      const symbolElements = document.querySelectorAll(`.${that.symbol}`);
-      symbolElements.forEach((el) => {
-        if (
-          el.parentElement.id == num1 ||
-          el.parentElement.id == num2 ||
-          el.parentElement.id == num3
-        ) {
-          el.classList.add("animate");
-        }
-      });
-    }
-
     // TRIPLET SUM ALGORITHM TO FIND IF PLAYER IS WIN
     /* I'M USING MAGIC SQUARE BOX WHICH MEAN
       IF TRIPLET SUM OF PICKED CELL IS EQUAL TO 15,
       THEY WIN */
     function hasWon() {
-      pc.sort((a, b) => a - b);
-      for (let i = 0; i < pc.length; i++) {
+      picked_cell.sort((a, b) => a - b);
+      for (let i = 0; i < picked_cell.length; i++) {
         let left = i + 1;
-        let right = pc.length - 1;
+        let right = picked_cell.length - 1;
 
         while (left < right) {
-          if (pc[i] + pc[left] + pc[right] === 15) {
-            animate(pc[i], pc[left], pc[right]);
+          if (picked_cell[i] + picked_cell[left] + picked_cell[right] === 15) {
+            animate(picked_cell[i], picked_cell[left], picked_cell[right]);
             return true;
           }
-          if (pc[i] + pc[left] + pc[right] < 15) {
+          if (picked_cell[i] + picked_cell[left] + picked_cell[right] < 15) {
             left++;
           } else {
             right--;
@@ -108,6 +95,20 @@ const check_winner_proto = {
         }
       }
       return false;
+    }
+
+    function animate(num1, num2, num3) {
+      const symbolElements = document.querySelectorAll(`.${that.symbol}`);
+      symbolElements.forEach((symbol_el) => {
+        if (
+          symbol_el.parentElement.id == num1 ||
+          symbol_el.parentElement.id == num2 ||
+          symbol_el.parentElement.id == num3
+        ) {
+          symbol_el.classList.remove("animation-popup");
+          symbol_el.classList.add("animation-fade-in-out");
+        }
+      });
     }
   },
 };
@@ -122,13 +123,13 @@ function createPlayer(symbol) {
     const create_el = document.createElement("img");
     create_el.setAttribute("src", `../images/${symbol}.png`);
     create_el.className = symbol;
+    create_el.classList.add("animation-popup");
     return create_el;
   };
 
   player.score = 0;
-  player.pickedCells = [];
+  player.picked_cells = [];
   player.symbol = symbol;
-
   player.symbol_el = create_symbol_el();
 
   return player;
@@ -137,9 +138,9 @@ function createPlayer(symbol) {
 function startGame() {
   someone_has_won = false;
   main.style.pointerEvents = "all";
-  // restart the player's pickedCells in case they were already picked
-  playerX.pickedCells = [];
-  playerO.pickedCells = [];
+  // restart the player's picked_cells in case they were already picked
+  playerX.picked_cells = [];
+  playerO.picked_cells = [];
   removeCells();
   createCells();
   gameBoard();
@@ -154,12 +155,12 @@ function gameBoard() {
       () => {
         if (your_turn) {
           cell.appendChild(playerX.symbol_el.cloneNode(true));
-          playerX.pickedCells.push(Number(cell.id));
+          playerX.picked_cells.push(Number(cell.id));
           playerX.check_winner();
           your_turn = !your_turn;
         } else {
           cell.appendChild(playerO.symbol_el.cloneNode(true));
-          playerO.pickedCells.push(Number(cell.id));
+          playerO.picked_cells.push(Number(cell.id));
           playerO.check_winner();
 
           your_turn = !your_turn;
