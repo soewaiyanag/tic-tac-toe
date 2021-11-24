@@ -116,12 +116,20 @@ const playerX = createPlayer("X");
 const playerO = createPlayer("O");
 
 function createPlayer(symbol) {
-  let player = Object.create(check_winner_proto);
+  const player = Object.create(check_winner_proto);
+
+  const create_symbol_el = () => {
+    const create_el = document.createElement("img");
+    create_el.setAttribute("src", `../images/${symbol}.png`);
+    create_el.className = symbol;
+    return create_el;
+  };
 
   player.score = 0;
   player.pickedCells = [];
   player.symbol = symbol;
-  player.symbol_el = `<img src="./images/${symbol}.png" class="${symbol}" />`;
+
+  player.symbol_el = create_symbol_el();
 
   return player;
 }
@@ -145,12 +153,12 @@ function gameBoard() {
       "click",
       () => {
         if (your_turn) {
-          cell.innerHTML = playerX.symbol_el;
+          cell.appendChild(playerX.symbol_el.cloneNode(true));
           playerX.pickedCells.push(Number(cell.id));
           playerX.check_winner();
           your_turn = !your_turn;
         } else {
-          cell.innerHTML = playerO.symbol_el;
+          cell.appendChild(playerO.symbol_el.cloneNode(true));
           playerO.pickedCells.push(Number(cell.id));
           playerO.check_winner();
 
