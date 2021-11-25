@@ -121,7 +121,7 @@ function createPlayer(symbol) {
 
   const create_symbol_el = () => {
     const create_el = document.createElement("img");
-    create_el.setAttribute("src", `../images/${symbol}.png`);
+    create_el.setAttribute("src", `./images/${symbol}.png`);
     create_el.className = symbol;
     create_el.classList.add("animation-popup");
     return create_el;
